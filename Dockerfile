@@ -1,5 +1,5 @@
 # set base image (host OS)
-FROM python:3.8
+FROM python:3.9-slim-buster
 
 # set the working directory in the container
 WORKDIR /app/
@@ -14,7 +14,11 @@ RUN apt -qq install -y --no-install-recommends \
     ffmpeg \
     jq \
     neofetch \
-    apt-utils
+    apt-utils \
+    python3-dev \
+    gcc \
+    libjpeg-dev \
+    zlib1g-dev 
 
 # install chrome
 RUN mkdir -p /tmp/ && \
@@ -40,7 +44,7 @@ ENV GOOGLE_CHROME_BIN /usr/bin/google-chrome-stable
 COPY requirements.txt .
 
 # install dependencies
-RUN pip install -U pip && pip install -r requirements.txt
+RUN pip install -U pip setuptools wheel && pip install -r requirements.txt
 
 # copy the content of the local src directory to the working directory
 COPY . .
